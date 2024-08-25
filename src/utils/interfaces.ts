@@ -60,6 +60,7 @@ export interface Feedback {
 export interface Settings {
   autoFill: boolean;
   saveAnswers: boolean;
+  saveWrongAnswers: boolean;
 }
 
 export type NullableSettings = {

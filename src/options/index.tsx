@@ -17,7 +17,7 @@ import Logo from '../static/logo/logo.svg';
 import { SETTINGS_STORAGE_KEY } from '../utils/constants';
 import { Settings } from '../utils/interfaces';
 
-const defaultSettings = { autoFill: true, saveAnswers: true };
+const defaultSettings: Settings = { autoFill: true, saveAnswers: true, saveWrongAnswers: true };
 
 export const Options: React.FC = () => {
   const [settings, setSettings] = React.useState<Settings>(defaultSettings);
@@ -64,6 +64,13 @@ export const Options: React.FC = () => {
   const handleSaveAnswersChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSettings((prev) => ({ ...prev, saveAnswers: event.target.checked }));
+    },
+    [],
+  );
+
+  const handleSaveWrongAnswersChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSettings((prev) => ({ ...prev, saveWrongAnswers: event.target.checked }));
     },
     [],
   );
@@ -119,6 +126,20 @@ export const Options: React.FC = () => {
                     label={
                       <Tooltip title="Remembers your correct answers so they can be auto-completed.">
                         <Typography variant="body1">Save Answers</Typography>
+                      </Tooltip>
+                    }
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch checked={settings?.saveWrongAnswers} onChange={handleSaveWrongAnswersChange} />
+                    }
+                    label={
+                      <Tooltip title="Remembers your wrong answers so they can be auto-completed.">
+                        <Typography variant="body1">Save Wrong Answers</Typography>
                       </Tooltip>
                     }
                   />

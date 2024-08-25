@@ -10,7 +10,11 @@ import { autoFillAnswer } from '../../utils/duolingo/auto-fill';
 import type { LessonState, Settings } from '../../utils/interfaces';
 
 const root = document.getElementById('root');
+
+console.debug('Duolingo Memo content script loading...');
 if (!root) throw new Error('root not found');
+
+console.log('1');
 
 const lessonState: LessonState = {
   onLesson: false,
@@ -74,25 +78,40 @@ const lessonObserverCallback = async () => {
     console.debug('Searching possible feedback node...');
     const node = document.querySelector('[data-test^="blame blame"]');
     if (node) {
+
       const parsedFeedback = parseFeedbackNode(node);
       if (parsedFeedback.correct) {
         console.debug('Correct answer node found!');
         if (settings.saveAnswers) {
-          const inputtedAnswer = getChallengeInputtedAnswer(lessonState.currentChallenge);
-          if (inputtedAnswer) {
-            console.debug(`Inputted answer: ${inputtedAnswer}`);
-            console.debug('Saving answer...');
-            await saveAnswer(lessonState.currentChallenge, inputtedAnswer);
-            console.debug('Answer saved!');
-          }
+          saveInputtedAnswer(lessonState);
         }
       } else {
         console.debug('Incorrect answer node found!');
+        if (settings.saveWrongAnswers) {
+          saveInputtedAnswer(lessonState);
+        }
       }
       lessonState.currentFeedback = parsedFeedback;
-    }
+    } 
   }
 };
+
+async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
+  const { currentChallenge } = _lessonState
+
+  if (currentChallenge === null) {
+    console.error('Cannot save answer without a challenge!');
+    return;
+  }
+
+  const inputtedAnswer = getChallengeInputtedAnswer(currentChallenge);
+          if (inputtedAnswer) {
+            console.debug(`Inputted answer: ${inputtedAnswer}`);
+            console.debug('Saving answer...');
+            await saveAnswer(currentChallenge, inputtedAnswer);
+            console.debug('Answer saved!');
+          }
+}
 
 const lessonObserver = new MutationObserver(lessonObserverCallback);
 
