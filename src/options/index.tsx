@@ -14,13 +14,12 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Layout } from '../components/layout';
 import Logo from '../static/logo/logo.svg';
-import { SETTINGS_STORAGE_KEY } from '../utils/constants';
+import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '../utils/constants';
 import { Settings } from '../utils/interfaces';
 
-const defaultSettings: Settings = { autoFill: true, saveAnswers: true, saveWrongAnswers: true };
 
 export const Options: React.FC = () => {
-  const [settings, setSettings] = React.useState<Settings>(defaultSettings);
+  const [settings, setSettings] = React.useState<Settings>(DEFAULT_SETTINGS);
   const [loading, setLoading] = React.useState(true);
   const [storageUsed, setStorageUsed] = React.useState(0);
 
@@ -44,7 +43,7 @@ export const Options: React.FC = () => {
   }, [settings]);
 
   const handleResetSettingsClick = React.useCallback(async () => {
-    setSettings(defaultSettings);
+    setSettings(DEFAULT_SETTINGS);
   }, []);
 
   const handleDeleteAllAnswersClick = React.useCallback(async () => {
@@ -227,7 +226,7 @@ export const Options: React.FC = () => {
               <Typography variant="body1" textAlign="center" fontSize={12}>
                 🄯 Copyleft 2023 /{' '}
                 <Link href="https://duhal.de/" target="_blank" underline="none">
-                  Matías Duhalde
+                    Marlon Passos
                 </Link>
                 . Very few rights reserved. Made with ❤️ in Chile.
               </Typography>

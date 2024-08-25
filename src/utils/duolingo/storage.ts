@@ -1,7 +1,8 @@
 import browser from 'webextension-polyfill';
-import { HASH_ALGORITH } from '../constants';
+import { ChallengeType, HASH_ALGORITH } from '../constants';
 import type { Challenge } from '../interfaces';
 import { isChallengeSupported } from './functions';
+import { isString } from 'radashi';
 
 /**
  * Searches an answer to a challenge in the extension storage.
@@ -17,6 +18,8 @@ export const searchExistingAnswer = async (challenge: Challenge): Promise<string
 
   const key = await getAnswerKey(challenge);
   const result = await browser.storage.local.get(key);
+
+  console.debug({ key, result });
 
   return result[key] ?? null;
 };
@@ -69,7 +72,17 @@ export async function getTotalDailyLessons() {
  * @returns The key used to store the answer
  */
 const getAnswerKey = async (challenge: Challenge): Promise<string> => {
-  const { type, prompt } = challenge;
+  let {  prompt } = challenge;
+  const { type, node } = challenge;
+
+  if (type === ChallengeType.LISTEN) {
+    const src = getAudioSrc(node);
+
+    if (isString(src)) {
+      prompt = [src]
+    }
+  }
+
   return Array.prototype.map
     .call(
       new Uint8Array(
@@ -82,3 +95,24 @@ const getAnswerKey = async (challenge: Challenge): Promise<string> => {
     )
     .join('');
 };
+
+
+function getAudioSrc(node: Element): string| null {
+  const selector = '._duo-ttsc_playback-buttons-wrapper_basic';
+
+  const audioNode = node.querySelector(selector);
+
+  if (!audioNode) {
+    return null;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const result =  audioNode?.[Object.keys(audioNode)[0]]?.child?.memoizedProps?.audio  
+
+  if (!isString(result)) {
+    return null;
+  }
+
+  return result;
+}

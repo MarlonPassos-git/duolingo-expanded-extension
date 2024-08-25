@@ -1,4 +1,4 @@
-import { SETTINGS_STORAGE_KEY } from './utils/constants';
+import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from './utils/constants';
 
 self.chrome.runtime.onInstalled.addListener(async () => {
   console.debug('Installed! DEBUG');
@@ -10,8 +10,9 @@ self.chrome.runtime.onInstalled.addListener(async () => {
   }
   await self.chrome.storage.sync.set({
     settings: {
-      autoFill: settings?.autoFill ?? true,
-      saveAnswers: settings?.saveAnswers ?? true,
+      autoFill: settings?.autoFill ?? DEFAULT_SETTINGS.autoFill,
+      saveAnswers: settings?.saveAnswers ?? DEFAULT_SETTINGS.saveAnswers,
+      saveWrongAnswers: settings?.saveWrongAnswers ?? DEFAULT_SETTINGS.saveWrongAnswers,
     },
   });
 });

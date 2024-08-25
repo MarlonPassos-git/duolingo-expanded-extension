@@ -77,7 +77,15 @@ export const getChallengeInputtedAnswer = (challenge: Challenge): string | strin
     return getTapCompleteChallengeInputtedAnswer(challenge as TapCompleteChallenge);
   } else if (type === ChallengeType.ASSIST) {
     return getAssistChallengeInputtedAnswer(challenge as AssistChallenge);
+  } else if (type === ChallengeType.LISTEN) {
+    return getTranslateChallengeInputtedAnswer(challenge as TranslateChallenge)
   }
 
   return null;
 };
+
+
+function getListeningChallengeInputtedAnswer(challenge: Challenge): string | string[] | null {
+  const src = challenge.prompt[0];
+  return src;
+}

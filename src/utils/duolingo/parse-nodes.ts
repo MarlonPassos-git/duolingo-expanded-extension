@@ -108,7 +108,10 @@ export const parseChallengeNode = (node: Element): Challenge => {
     return parseTapCompleteChallenge(node);
   } else if (type === ChallengeType.ASSIST) {
     return parseAssistChallenge(node);
+  } else if (type === ChallengeType.LISTEN) {
+    return parseTranslateChallenge(node);
   }
+
   return {
     node,
     type,

@@ -11,6 +11,7 @@ import {
 import { autoFillAnswer } from '../../utils/duolingo/auto-fill';
 import type { LessonState, Settings } from '../../utils/interfaces';
 import { throttle } from "radashi"
+import { duolingoState } from './duolingoState';
 
 const root = document.getElementById('root');
 
@@ -30,8 +31,7 @@ const clearLessonState = () => {
   lessonState.currentFeedback = null;
 };
 
-const lessonUrlStringMatch = 'duolingo.com/lesson/';
-const LEARN_UrlStringMatch = 'duolingo.com/learn';
+const lessonUrlStringMatch = 'duolingo.com/lesson';
 
 let settings: Settings;
 
@@ -93,7 +93,7 @@ const lessonObserverCallback = async () => {
           saveInputtedAnswer(lessonState);
         }
       } else {
-        console.debug('Incorrect answer node found!');
+        console.debug('Incorrect answer node found! ', settings);
         if (settings.saveWrongAnswers) {
           saveInputtedAnswer(lessonState);
         }
@@ -113,6 +113,7 @@ const lessonObserverCallback = async () => {
 
 async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
   const { currentChallenge } = _lessonState
+  console.debug('Saving inputted answer...', currentChallenge);
 
   if (currentChallenge === null) {
     console.error('Cannot save answer without a challenge!');
@@ -125,6 +126,8 @@ async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
             console.debug('Saving answer...');
             await saveAnswer(currentChallenge, inputtedAnswer);
             console.debug('Answer saved!');
+          } else {
+            console.debug('No inputted answer found!');
           }
 }
 
@@ -132,6 +135,7 @@ const lessonObserver = new MutationObserver(lessonObserverCallback);
 
 let oldHref = document.location.href;
 
+const handleStreakMenuThrottled = throttle({interval: 1_000}, handleStreakMenu);
 /**
  * Main functionality should only execute when the user is on a lesson page.
  * This is determined by checking if the URL contains the string 'duolingo.com/lesson/'.
@@ -153,6 +157,7 @@ const toggleObservers = async (currentHref: string) => {
     clearLessonState();
     lessonObserver.disconnect();
   }
+  handleStreakMenuThrottled()
 };
 
 const urlObserverCallback = () => {
@@ -178,7 +183,41 @@ function isFinishLessonPage() {
   return element !== null;
 }
 
-window.addEventListener('duolingoStateChange', (e) => {
-  console.debug(e);
-  console.log('state changed');
-});
+
+window.addEventListener('duolingoStateChange', handleStreakMenuThrottled)
+
+async function handleStreakMenu() {
+let $streakMenuClone: HTMLDivElement
+  if (document.getElementById('daily-lessons')) { 
+    $streakMenuClone = document.getElementById('daily-lessons') as HTMLDivElement
+  } else {
+    const $streakMenu = await awaitElement<HTMLDivElement>('[data-test="streak-menu"]')
+    $streakMenuClone = $streakMenu.cloneNode(true) as HTMLDivElement
+    $streakMenuClone.dataset.test = "daily-lessons"
+    $streakMenuClone.id = "daily-lessons"
+
+    const $img = $streakMenuClone.querySelector('img')
+
+    if ($img) {
+      $img.src = 'https://d35aaqx5ub95lt.cloudfront.net/images/path/icons/53727b0c96103443bc616435bb1f2fbc.svg'
+    }
+
+    $streakMenu.insertAdjacentElement("afterend", $streakMenuClone)
+  }
+  const $streak = $streakMenuClone.querySelector('[data-test="streak-stat"]')
+  if ($streak) {
+    $streak.textContent = duolingoState.totalDailyLessons.toString()
+  }
+}
+
+function awaitElement<T extends Element>(selector: string) {
+  return new Promise<T>((resolve) => {
+    const interval = setInterval(() => {
+      const element = document.querySelector<T>(selector);
+      if (element) {
+        clearInterval(interval);
+        resolve(element);
+      }
+    }, 100);
+  });
+}

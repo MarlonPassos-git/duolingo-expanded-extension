@@ -8,5 +8,12 @@ import type { Challenge } from '../interfaces';
  * @returns Whether the challenge is supported by the extension
  */
 export const isChallengeSupported = (challenge: Challenge): boolean => {
+  console.debug('isChallengeSupported ', {
+    challenge,
+    supportedChallenges,
+    include: supportedChallenges.includes(challenge.type),
+  });
+
+  
   return supportedChallenges.includes(challenge.type);
 };
