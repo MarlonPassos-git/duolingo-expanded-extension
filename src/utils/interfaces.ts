@@ -9,6 +9,11 @@ export interface LessonState {
   currentFeedback: Feedback | null;
 }
 
+export interface DuolingoState {
+  totalDailyLessons: number;
+  isLoaded: boolean
+}
+
 export interface Challenge {
   // The node linked to this challenge
   node: Element;

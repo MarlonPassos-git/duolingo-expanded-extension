@@ -5,9 +5,12 @@ import {
   parseFeedbackNode,
   saveAnswer,
   searchExistingAnswer,
+  getTotalDailyLessons,
+  saveTotalDailyLessons
 } from '../../utils/duolingo';
 import { autoFillAnswer } from '../../utils/duolingo/auto-fill';
 import type { LessonState, Settings } from '../../utils/interfaces';
+import { throttle } from "radashi"
 
 const root = document.getElementById('root');
 
@@ -28,11 +31,13 @@ const clearLessonState = () => {
 };
 
 const lessonUrlStringMatch = 'duolingo.com/lesson/';
+const LEARN_UrlStringMatch = 'duolingo.com/learn';
 
 let settings: Settings;
 
 (async () => {
   settings = (await self.chrome.storage.sync.get(SETTINGS_STORAGE_KEY)).settings;
+  
 })();
 
 self.chrome.storage.sync.onChanged.addListener((changes) => {
@@ -40,6 +45,8 @@ self.chrome.storage.sync.onChanged.addListener((changes) => {
     settings = changes[SETTINGS_STORAGE_KEY].newValue;
   }
 });
+
+const saveTotalDailyLessonsThrottled = throttle({interval: 30_000}, saveTotalDailyLessons);
 
 const lessonObserverCallback = async () => {
   if (lessonState.currentChallenge !== null && !lessonState.currentChallenge.node.isConnected) {
@@ -94,6 +101,14 @@ const lessonObserverCallback = async () => {
       lessonState.currentFeedback = parsedFeedback;
     } 
   }
+
+  if (isFinishLessonPage()) {
+    console.debug('Lesson finished!');
+    const totalDailyLessons = await getTotalDailyLessons();
+    console.debug(`Total daily lessons: ${totalDailyLessons + 1}`);
+    saveTotalDailyLessonsThrottled(totalDailyLessons + 1);
+    console.debug('Total daily lessons saved!');
+  }
 };
 
 async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
@@ -126,7 +141,7 @@ let oldHref = document.location.href;
  *
  * TODO: This may cause performance issues since the observer is always running.
  */
-const toggleObservers = (currentHref: string) => {
+const toggleObservers = async (currentHref: string) => {
   if (currentHref.includes(lessonUrlStringMatch) && !lessonState.onLesson) {
     console.debug('Lesson detected!');
     lessonState.onLesson = true;
@@ -156,3 +171,14 @@ urlObserver.observe(root, { childList: true, subtree: true });
 toggleObservers(document.location.href);
 
 console.debug('Duolingo Memo content script loaded!');
+
+function isFinishLessonPage() {
+  const element = document.querySelector('[data-test="session-complete-slide"]');
+
+  return element !== null;
+}
+
+window.addEventListener('duolingoStateChange', (e) => {
+  console.debug(e);
+  console.log('state changed');
+});

@@ -40,6 +40,28 @@ export const saveAnswer = async (
   await browser.storage.local.set({ [key]: answer });
 };
 
+export function getDayKey() {
+  const day = new Date();
+  return day.getDate() + '/' + (day.getMonth() + 1) + '/' + day.getFullYear();
+}
+
+export async function saveTotalDailyLessons(totalDailyLessons: number) {
+  await browser.storage.local.set({ 
+    [getDayKey()]: totalDailyLessons
+   });
+}
+
+export async function getTotalDailyLessons() {
+  const result = await browser.storage.local.get(getDayKey());
+  const n = result[getDayKey()];
+
+  if (isNaN(n)) {
+    return 0;
+  }
+
+  return Number(n);
+}
+
 /**
  * Forms the key corresponding to the answer of the provided challenge
  *
