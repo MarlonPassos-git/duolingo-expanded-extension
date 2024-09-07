@@ -30,9 +30,7 @@ let find = false
        do {
      // click body 
     await page.click('body')
-    console.log("click body")
     if (await isListenTapLesson(page)) {
-      console.log("listen tap")
       await setPlayerInputMethod(page, "keyboard")
       const audioSrc = await getAudioSrc(page)
 
@@ -43,24 +41,25 @@ let find = false
       if (repostasRespondidas.has(audioSrc)) {
         const typeText = await getTypeTextInChallengeInput(page)
         expect(repostasRespondidas.get(audioSrc)).toBe(typeText)
+        find = true
+        // sleep(10000000)
       } else {
         const text = "hello"
         await typeTextInChallengeInput(page, text)
         repostasRespondidas.set(audioSrc, text)
         await nextLesson(page)
         await nextLesson(page)
-        console.log("next lesson")
       }
 
       await sleep(1000)
     } else if (await isSelectTranscription(page)) {
-      console.log("select transcription")
       await selectChoice(page)
       await nextLesson(page)
+    sleep(100)
       await nextLesson(page)
     } else {
-      console.log("else")
       await skipLesson(page)
+
       await nextLesson(page)
     } 
 

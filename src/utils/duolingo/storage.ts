@@ -78,6 +78,8 @@ const getAnswerKey = async (challenge: Challenge): Promise<string> => {
   if (type === ChallengeType.LISTEN) {
     const src = getAudioSrc(node);
 
+    console.log("marlon",src);
+
     if (isString(src)) {
       prompt = [src]
     }
@@ -98,7 +100,7 @@ const getAnswerKey = async (challenge: Challenge): Promise<string> => {
 
 
 function getAudioSrc(node: Element): string| null {
-  const selector = '._duo-ttsc_playback-buttons-wrapper_basic';
+  const selector = '._3qAs-';
 
   const audioNode = node.querySelector(selector);
 

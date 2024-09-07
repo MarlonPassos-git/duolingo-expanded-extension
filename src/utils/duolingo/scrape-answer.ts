@@ -79,6 +79,8 @@ export const getChallengeInputtedAnswer = (challenge: Challenge): string | strin
     return getAssistChallengeInputtedAnswer(challenge as AssistChallenge);
   } else if (type === ChallengeType.LISTEN) {
     return getTranslateChallengeInputtedAnswer(challenge as TranslateChallenge)
+  } else if (type === ChallengeType.LISTEN_TAP) {
+    return getTranslateChallengeInputtedAnswer(challenge as TranslateChallenge)
   }
 
   return null;

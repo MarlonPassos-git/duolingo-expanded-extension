@@ -21,8 +21,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       radashi:
-        specifier: 12.2.0-beta.ef0154b
-        version: 12.2.0-beta.ef0154b
+        specifier: 12.2.0-beta.af825f4
+        version: 12.2.0-beta.af825f4
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -1869,8 +1869,8 @@ packages:
   queue-tick@1.0.1:
     resolution: {integrity: sha512-kJt5qhMxoszgU/62PLP1CJytzd2NKetjSRnyuj31fDd3Rlcz3fzlFdFLD1SItunPwyqEOkca6GbV612BWfaBag==}
 
-  radashi@12.2.0-beta.ef0154b:
-    resolution: {integrity: sha512-EpXUT8ZcitKw9zIvyki4iwFHkMUpMrgjMdJwhLzrtOOdwZ5CcrNQyNafRH6vii+6ukPlqm4bsrmsQn1r60fUVQ==}
+  radashi@12.2.0-beta.af825f4:
+    resolution: {integrity: sha512-qgHft4yu2ZPoHGEYEfqfsq1NMGoPq2Eo/r3QkbrJimNJ+63m8sDgISsQnTFjayC3pRCBr+FO2YIsORPs8pIiJA==}
     engines: {node: '>=16.0.0'}
 
   react-dom@18.3.1:
@@ -4120,7 +4120,7 @@ snapshots:
 
   queue-tick@1.0.1: {}
 
-  radashi@12.2.0-beta.ef0154b: {}
+  radashi@12.2.0-beta.af825f4: {}
 
   react-dom@18.3.1(react@18.3.1):
     dependencies:

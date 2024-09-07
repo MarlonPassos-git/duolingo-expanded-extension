@@ -16,6 +16,7 @@ export enum ChallengeType {
   COMPLETE_REVERSE_TRANSLATION = 'completeReverseTranslation',
   LISTEN_COMPLETE = 'listenComplete',
   LISTEN = 'listen',
+  LISTEN_TAP = 'listenTap',
   SPEAK = 'speak',
   UNKNOWN = UNKNOWN_CHALLENGE_TYPE,
 }
@@ -32,4 +33,5 @@ export const supportedChallenges: ChallengeType[] = [
   ChallengeType.TAP_COMPLETE,
   ChallengeType.ASSIST,
   ChallengeType.LISTEN,
+  ChallengeType.LISTEN_TAP,
 ];

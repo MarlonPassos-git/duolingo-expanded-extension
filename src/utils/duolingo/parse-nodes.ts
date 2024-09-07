@@ -110,6 +110,8 @@ export const parseChallengeNode = (node: Element): Challenge => {
     return parseAssistChallenge(node);
   } else if (type === ChallengeType.LISTEN) {
     return parseTranslateChallenge(node);
+  } else if (type === ChallengeType.LISTEN_TAP) {
+    return parseTranslateChallenge(node);
   }
 
   return {

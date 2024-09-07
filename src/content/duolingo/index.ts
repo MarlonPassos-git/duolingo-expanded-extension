@@ -18,8 +18,6 @@ const root = document.getElementById('root');
 console.debug('Duolingo Memo content script loading...');
 if (!root) throw new Error('root not found');
 
-console.log('1');
-
 const lessonState: LessonState = {
   onLesson: false,
   currentChallenge: null,
