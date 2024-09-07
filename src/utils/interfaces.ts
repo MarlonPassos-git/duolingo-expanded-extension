@@ -1,73 +1,73 @@
-import type { ChallengeType } from './constants';
+import type { ChallengeType } from './constants'
 
 export interface LessonState {
   // Whether the user is on a lesson page
-  onLesson: boolean;
+  onLesson: boolean
   // Information about the current challenge
-  currentChallenge: Challenge | null;
+  currentChallenge: Challenge | null
   // Information about the current feedback
-  currentFeedback: Feedback | null;
+  currentFeedback: Feedback | null
 }
 
 export interface DuolingoState {
-  totalDailyLessons: number;
+  totalDailyLessons: number
   isLoaded: boolean
 }
 
 export interface Challenge {
   // The node linked to this challenge
-  node: Element;
+  node: Element
   // The challenge type
-  type: ChallengeType;
+  type: ChallengeType
   // The challenge header
-  header: string;
+  header: string
   // The challenge prompt
-  prompt: string[];
+  prompt: string[]
 }
 
 export interface TranslateChallenge extends Challenge {
-  type: ChallengeType.TRANSLATE;
+  type: ChallengeType.TRANSLATE
   // The challenge prompt
-  answerArea: HTMLTextAreaElement;
+  answerArea: HTMLTextAreaElement
 }
 
 export interface TranslateTapChallenge extends Challenge {
-  type: ChallengeType.TRANSLATE_TAP;
+  type: ChallengeType.TRANSLATE_TAP
   // The word bank containing the tokens
-  wordBank: HTMLDivElement;
+  wordBank: HTMLDivElement
   // The tokens that can be tapped
-  tapTokens: Record<string, HTMLSpanElement>;
+  tapTokens: Record<string, HTMLSpanElement>
 }
 
 export interface TapCompleteChallenge extends Challenge {
-  type: ChallengeType.TAP_COMPLETE;
+  type: ChallengeType.TAP_COMPLETE
 
   // The word bank containing the tokens
-  wordBank: HTMLDivElement;
+  wordBank: HTMLDivElement
   // The tokens that can be tapped
-  tapTokens: Record<string, HTMLSpanElement>;
+  tapTokens: Record<string, HTMLSpanElement>
 }
 
 export interface AssistChallenge extends Challenge {
-  type: ChallengeType.ASSIST;
+  type: ChallengeType.ASSIST
 
   // The list of options that can be selected
-  options: HTMLDivElement[];
+  options: HTMLDivElement[]
 }
 
 export interface Feedback {
   // The node linked to this feedback
-  node: Element;
+  node: Element
   // Whether the feedback is correct or incorrect
-  correct: boolean;
+  correct: boolean
 }
 
 export interface Settings {
-  autoFill: boolean;
-  saveAnswers: boolean;
-  saveWrongAnswers: boolean;
+  autoFill: boolean
+  saveAnswers: boolean
+  saveWrongAnswers: boolean
 }
 
 export type NullableSettings = {
   [P in keyof Settings]: Settings[P] | null;
-};
+}

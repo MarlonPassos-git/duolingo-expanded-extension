@@ -1,8 +1,8 @@
-import browser from 'webextension-polyfill';
-import { ChallengeType, HASH_ALGORITH } from '../constants';
-import type { Challenge } from '../interfaces';
-import { isChallengeSupported } from './functions';
-import { isString } from 'radashi';
+import browser from 'webextension-polyfill'
+import { ChallengeType, HASH_ALGORITH } from '../constants'
+import type { Challenge } from '../interfaces'
+import { isChallengeSupported } from './functions'
+import { isString } from 'radashi'
 
 /**
  * Searches an answer to a challenge in the extension storage.
@@ -12,17 +12,18 @@ import { isString } from 'radashi';
  */
 export const searchExistingAnswer = async (challenge: Challenge): Promise<string | null> => {
   if (!isChallengeSupported(challenge)) {
-    console.debug('Unsupported challenge type. Cannot search for existing answer.');
-    return null;
+    console.debug('Unsupported challenge type. Cannot search for existing answer.')
+
+    return null
   }
 
-  const key = await getAnswerKey(challenge);
-  const result = await browser.storage.local.get(key);
+  const key = await getAnswerKey(challenge)
+  const result = await browser.storage.local.get(key)
 
-  console.debug({ key, result });
+  console.debug({ key, result })
 
-  return result[key] ?? null;
-};
+  return result[key] ?? null
+}
 
 /**
  * Saves an answer to a challenge in the extension storage.
@@ -35,34 +36,36 @@ export const saveAnswer = async (
   answer: string | string[],
 ): Promise<void> => {
   if (!isChallengeSupported(challenge)) {
-    console.debug('Unsupported challenge type. Will not save answer.');
-    return;
+    console.debug('Unsupported challenge type. Will not save answer.')
+
+    return
   }
 
-  const key = await getAnswerKey(challenge);
-  await browser.storage.local.set({ [key]: answer });
-};
+  const key = await getAnswerKey(challenge)
+  await browser.storage.local.set({ [key]: answer })
+}
 
 export function getDayKey() {
-  const day = new Date();
-  return day.getDate() + '/' + (day.getMonth() + 1) + '/' + day.getFullYear();
+  const day = new Date()
+
+  return day.getDate() + '/' + (day.getMonth() + 1) + '/' + day.getFullYear()
 }
 
 export async function saveTotalDailyLessons(totalDailyLessons: number) {
-  await browser.storage.local.set({ 
-    [getDayKey()]: totalDailyLessons
-   });
+  await browser.storage.local.set({
+    [getDayKey()]: totalDailyLessons,
+  })
 }
 
 export async function getTotalDailyLessons() {
-  const result = await browser.storage.local.get(getDayKey());
-  const n = result[getDayKey()];
+  const result = await browser.storage.local.get(getDayKey())
+  const n = result[getDayKey()]
 
   if (isNaN(n)) {
-    return 0;
+    return 0
   }
 
-  return Number(n);
+  return Number(n)
 }
 
 /**
@@ -72,13 +75,13 @@ export async function getTotalDailyLessons() {
  * @returns The key used to store the answer
  */
 const getAnswerKey = async (challenge: Challenge): Promise<string> => {
-  let {  prompt } = challenge;
-  const { type, node } = challenge;
+  let { prompt } = challenge
+  const { type, node } = challenge
 
   if (type === ChallengeType.LISTEN) {
-    const src = getAudioSrc(node);
+    const src = getAudioSrc(node)
 
-    console.log("marlon",src);
+    console.log('marlon', src)
 
     if (isString(src)) {
       prompt = [src]
@@ -93,28 +96,26 @@ const getAnswerKey = async (challenge: Challenge): Promise<string> => {
           new TextEncoder().encode(`${type}///${prompt.toString()}`),
         ),
       ),
-      (x) => ('00' + x.toString(16)).slice(-2),
+      x => ('00' + x.toString(16)).slice(-2),
     )
-    .join('');
-};
+    .join('')
+}
 
-
-function getAudioSrc(node: Element): string| null {
-  const selector = '._3qAs-';
-
-  const audioNode = node.querySelector(selector);
+function getAudioSrc(node: Element): string | null {
+  const selector = '._3qAs-'
+  const audioNode = node.querySelector(selector)
 
   if (!audioNode) {
-    return null;
+    return null
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const result =  audioNode?.[Object.keys(audioNode)[0]]?.child?.memoizedProps?.audio  
+  const result = audioNode?.[Object.keys(audioNode)[0]]?.child?.memoizedProps?.audio
 
   if (!isString(result)) {
-    return null;
+    return null
   }
 
-  return result;
+  return result
 }

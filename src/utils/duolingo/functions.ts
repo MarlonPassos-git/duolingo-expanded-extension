@@ -1,5 +1,5 @@
-import { supportedChallenges } from '../constants';
-import type { Challenge } from '../interfaces';
+import { supportedChallenges } from '../constants'
+import type { Challenge } from '../interfaces'
 
 /**
  * Returns false if the challenge is not supported by the extension.
@@ -12,8 +12,7 @@ export const isChallengeSupported = (challenge: Challenge): boolean => {
     challenge,
     supportedChallenges,
     include: supportedChallenges.includes(challenge.type),
-  });
+  })
 
-  
-  return supportedChallenges.includes(challenge.type);
-};
+  return supportedChallenges.includes(challenge.type)
+}

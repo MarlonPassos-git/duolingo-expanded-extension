@@ -1,3 +1,3 @@
-import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles'
 
-export const theme = responsiveFontSizes(createTheme());
+export const theme = responsiveFontSizes(createTheme())

@@ -1,1 +1,1 @@
-# Duolingo Extended
+# Duolingo Extended (Beta)

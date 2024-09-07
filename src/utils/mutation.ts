@@ -5,8 +5,8 @@
  * @returns All added nodes across all the mutations in the provided list
  */
 export const getAllAddedNodes = (mutations: MutationRecord[]): Node[] => {
-  return mutations.map((mutation) => Array.from(mutation.addedNodes)).flat();
-};
+  return mutations.map(mutation => Array.from(mutation.addedNodes)).flat()
+}
 
 /**
  * Returns a list of all nodes deleted across all mutations in the provided list
@@ -15,5 +15,5 @@ export const getAllAddedNodes = (mutations: MutationRecord[]): Node[] => {
  * @returns All deleted nodes across all the mutations in the provided list
  */
 export const getAllDeletedNodes = (mutations: MutationRecord[]): Node[] => {
-  return mutations.map((mutation) => Array.from(mutation.removedNodes)).flat();
-};
+  return mutations.map(mutation => Array.from(mutation.removedNodes)).flat()
+}

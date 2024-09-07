@@ -1,139 +1,139 @@
-import { SETTINGS_STORAGE_KEY } from '../../utils/constants';
+import { SETTINGS_STORAGE_KEY } from '../../utils/constants'
 import {
   getChallengeInputtedAnswer,
+  getTotalDailyLessons,
   parseChallengeNode,
   parseFeedbackNode,
   saveAnswer,
+  saveTotalDailyLessons,
   searchExistingAnswer,
-  getTotalDailyLessons,
-  saveTotalDailyLessons
-} from '../../utils/duolingo';
-import { autoFillAnswer } from '../../utils/duolingo/auto-fill';
-import type { LessonState, Settings } from '../../utils/interfaces';
-import { throttle } from "radashi"
-import { duolingoState } from './duolingoState';
+} from '../../utils/duolingo'
+import { autoFillAnswer } from '../../utils/duolingo/auto-fill'
+import type { LessonState, Settings } from '../../utils/interfaces'
+import { throttle } from 'radashi'
+import { duolingoState } from './duolingoState'
 
-const root = document.getElementById('root');
+const root = document.getElementById('root')
 
-console.debug('Duolingo Memo content script loading...');
-if (!root) throw new Error('root not found');
+console.debug('Duolingo Memo content script loading...')
+if (!root) throw new Error('root not found')
 
 const lessonState: LessonState = {
   onLesson: false,
   currentChallenge: null,
   currentFeedback: null,
-};
-
+}
 const clearLessonState = () => {
-  lessonState.currentChallenge = null;
-  lessonState.currentFeedback = null;
-};
-
-const lessonUrlStringMatch = 'duolingo.com/lesson';
+  lessonState.currentChallenge = null
+  lessonState.currentFeedback = null
+}
+const lessonUrlStringMatch = 'duolingo.com/lesson'
 
 let settings: Settings;
 
 (async () => {
-  settings = (await self.chrome.storage.sync.get(SETTINGS_STORAGE_KEY)).settings;
-  
-})();
+  settings = (await self.chrome.storage.sync.get(SETTINGS_STORAGE_KEY)).settings
+})()
 
 self.chrome.storage.sync.onChanged.addListener((changes) => {
   if (changes[SETTINGS_STORAGE_KEY]) {
-    settings = changes[SETTINGS_STORAGE_KEY].newValue;
+    settings = changes[SETTINGS_STORAGE_KEY].newValue
   }
-});
+})
 
-const saveTotalDailyLessonsThrottled = throttle({interval: 30_000}, saveTotalDailyLessons);
-
+const saveTotalDailyLessonsThrottled = throttle({ interval: 30_000 }, saveTotalDailyLessons)
 const lessonObserverCallback = async () => {
   if (lessonState.currentChallenge !== null && !lessonState.currentChallenge.node.isConnected) {
-    console.debug('Challenge node disconnected!');
-    lessonState.currentChallenge = null;
+    console.debug('Challenge node disconnected!')
+    lessonState.currentChallenge = null
   }
   if (lessonState.currentFeedback !== null && !lessonState.currentFeedback.node.isConnected) {
-    console.debug('Feedback node disconnected!');
-    lessonState.currentFeedback = null;
+    console.debug('Feedback node disconnected!')
+    lessonState.currentFeedback = null
   }
 
   if (lessonState.currentChallenge === null) {
     // Find the challenge node
-    console.debug('Searching possible challenge node...');
-    const node = document.querySelector('[data-test^="challenge challenge"]');
+    console.debug('Searching possible challenge node...')
+    const node = document.querySelector('[data-test^="challenge challenge"]')
     if (node) {
-      const parsedChallenge = parseChallengeNode(node);
-      console.debug(`Challenge node of type ${parsedChallenge.type} found!`);
-      lessonState.currentChallenge = parsedChallenge;
+      const parsedChallenge = parseChallengeNode(node)
+      console.debug(`Challenge node of type ${parsedChallenge.type} found!`)
+      lessonState.currentChallenge = parsedChallenge
 
       if (settings.autoFill) {
         console.debug(
           `Searching for existing answer for challenge: ${parsedChallenge.prompt.toString()}`,
-        );
-        const answer = await searchExistingAnswer(parsedChallenge);
+        )
+        const answer = await searchExistingAnswer(parsedChallenge)
         if (answer) {
-          console.debug(`Found the answer: ${answer}`);
-          autoFillAnswer(parsedChallenge, answer);
-        } else {
-          console.debug('No answer found!');
+          console.debug(`Found the answer: ${answer}`)
+          autoFillAnswer(parsedChallenge, answer)
+        }
+        else {
+          console.debug('No answer found!')
         }
       }
     }
-  } else if (lessonState.currentFeedback === null) {
+  }
+  else if (lessonState.currentFeedback === null) {
     // Find the feedback node in the mutation
-    console.debug('Searching possible feedback node...');
-    const node = document.querySelector('[data-test^="blame blame"]');
+    console.debug('Searching possible feedback node...')
+    const node = document.querySelector('[data-test^="blame blame"]')
     if (node) {
-
-      const parsedFeedback = parseFeedbackNode(node);
+      const parsedFeedback = parseFeedbackNode(node)
       if (parsedFeedback.correct) {
-        console.debug('Correct answer node found!');
+        console.debug('Correct answer node found!')
         if (settings.saveAnswers) {
-          saveInputtedAnswer(lessonState);
-        }
-      } else {
-        console.debug('Incorrect answer node found! ', settings);
-        if (settings.saveWrongAnswers) {
-          saveInputtedAnswer(lessonState);
+          saveInputtedAnswer(lessonState)
         }
       }
-      lessonState.currentFeedback = parsedFeedback;
-    } 
+      else {
+        console.debug('Incorrect answer node found! ', settings)
+        if (settings.saveWrongAnswers) {
+          saveInputtedAnswer(lessonState)
+        }
+      }
+      lessonState.currentFeedback = parsedFeedback
+    }
   }
 
   if (isFinishLessonPage()) {
-    console.debug('Lesson finished!');
-    const totalDailyLessons = await getTotalDailyLessons();
-    console.debug(`Total daily lessons: ${totalDailyLessons + 1}`);
-    saveTotalDailyLessonsThrottled(totalDailyLessons + 1);
-    console.debug('Total daily lessons saved!');
+    console.debug('Lesson finished!')
+    const totalDailyLessons = await getTotalDailyLessons()
+    console.debug(`Total daily lessons: ${totalDailyLessons + 1}`)
+    saveTotalDailyLessonsThrottled(totalDailyLessons + 1)
+    console.debug('Total daily lessons saved!')
   }
-};
+}
 
 async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
   const { currentChallenge } = _lessonState
-  console.debug('Saving inputted answer...', currentChallenge);
+  console.debug('Saving inputted answer...', currentChallenge)
 
   if (currentChallenge === null) {
-    console.error('Cannot save answer without a challenge!');
-    return;
+    console.error('Cannot save answer without a challenge!')
+
+    return
   }
 
-  const inputtedAnswer = getChallengeInputtedAnswer(currentChallenge);
-          if (inputtedAnswer) {
-            console.debug(`Inputted answer: ${inputtedAnswer}`);
-            console.debug('Saving answer...');
-            await saveAnswer(currentChallenge, inputtedAnswer);
-            console.debug('Answer saved!');
-          } else {
-            console.debug('No inputted answer found!');
-          }
+  const inputtedAnswer = getChallengeInputtedAnswer(currentChallenge)
+  if (inputtedAnswer) {
+    console.debug(`Inputted answer: ${inputtedAnswer}`)
+    console.debug('Saving answer...')
+    await saveAnswer(currentChallenge, inputtedAnswer)
+    console.debug('Answer saved!')
+  }
+  else {
+    console.debug('No inputted answer found!')
+  }
 }
 
-const lessonObserver = new MutationObserver(lessonObserverCallback);
+const lessonObserver = new MutationObserver(lessonObserverCallback)
 
-let oldHref = document.location.href;
+let oldHref = document.location.href
 
-const handleStreakMenuThrottled = throttle({interval: 1_000}, handleStreakMenu);
+const handleStreakMenuThrottled = throttle({ interval: 1_000 }, handleStreakMenu)
 /**
  * Main functionality should only execute when the user is on a lesson page.
  * This is determined by checking if the URL contains the string 'duolingo.com/lesson/'.
@@ -145,54 +145,53 @@ const handleStreakMenuThrottled = throttle({interval: 1_000}, handleStreakMenu);
  */
 const toggleObservers = async (currentHref: string) => {
   if (currentHref.includes(lessonUrlStringMatch) && !lessonState.onLesson) {
-    console.debug('Lesson detected!');
-    lessonState.onLesson = true;
-    clearLessonState();
-    lessonObserver.observe(root, { childList: true, subtree: true });
-  } else if (lessonState.onLesson) {
-    console.debug('Lesson ended!');
-    lessonState.onLesson = false;
-    clearLessonState();
-    lessonObserver.disconnect();
+    console.debug('Lesson detected!')
+    lessonState.onLesson = true
+    clearLessonState()
+    lessonObserver.observe(root, { childList: true, subtree: true })
+  }
+  else if (lessonState.onLesson) {
+    console.debug('Lesson ended!')
+    lessonState.onLesson = false
+    clearLessonState()
+    lessonObserver.disconnect()
   }
   handleStreakMenuThrottled()
-};
-
+}
 const urlObserverCallback = () => {
-  const currentHref = document.location.href;
+  const currentHref = document.location.href
   if (oldHref !== currentHref) {
-    oldHref = currentHref;
-    toggleObservers(currentHref);
+    oldHref = currentHref
+    toggleObservers(currentHref)
   }
-};
+}
+const urlObserver = new MutationObserver(urlObserverCallback)
 
-const urlObserver = new MutationObserver(urlObserverCallback);
-
-urlObserver.observe(root, { childList: true, subtree: true });
+urlObserver.observe(root, { childList: true, subtree: true })
 
 // Handle the case where the user navigates to a lesson directly
-toggleObservers(document.location.href);
+toggleObservers(document.location.href)
 
-console.debug('Duolingo Memo content script loaded!');
+console.debug('Duolingo Memo content script loaded!')
 
 function isFinishLessonPage() {
-  const element = document.querySelector('[data-test="session-complete-slide"]');
+  const element = document.querySelector('[data-test="session-complete-slide"]')
 
-  return element !== null;
+  return element !== null
 }
-
 
 window.addEventListener('duolingoStateChange', handleStreakMenuThrottled)
 
 async function handleStreakMenu() {
-let $streakMenuClone: HTMLDivElement
-  if (document.getElementById('daily-lessons')) { 
+  let $streakMenuClone: HTMLDivElement
+  if (document.getElementById('daily-lessons')) {
     $streakMenuClone = document.getElementById('daily-lessons') as HTMLDivElement
-  } else {
+  }
+  else {
     const $streakMenu = await awaitElement<HTMLDivElement>('[data-test="streak-menu"]')
     $streakMenuClone = $streakMenu.cloneNode(true) as HTMLDivElement
-    $streakMenuClone.dataset.test = "daily-lessons"
-    $streakMenuClone.id = "daily-lessons"
+    $streakMenuClone.dataset.test = 'daily-lessons'
+    $streakMenuClone.id = 'daily-lessons'
 
     const $img = $streakMenuClone.querySelector('img')
 
@@ -200,7 +199,7 @@ let $streakMenuClone: HTMLDivElement
       $img.src = 'https://d35aaqx5ub95lt.cloudfront.net/images/path/icons/53727b0c96103443bc616435bb1f2fbc.svg'
     }
 
-    $streakMenu.insertAdjacentElement("afterend", $streakMenuClone)
+    $streakMenu.insertAdjacentElement('afterend', $streakMenuClone)
   }
   const $streak = $streakMenuClone.querySelector('[data-test="streak-stat"]')
   if ($streak) {
@@ -211,11 +210,11 @@ let $streakMenuClone: HTMLDivElement
 function awaitElement<T extends Element>(selector: string) {
   return new Promise<T>((resolve) => {
     const interval = setInterval(() => {
-      const element = document.querySelector<T>(selector);
+      const element = document.querySelector<T>(selector)
       if (element) {
-        clearInterval(interval);
-        resolve(element);
+        clearInterval(interval)
+        resolve(element)
       }
-    }, 100);
-  });
+    }, 100)
+  })
 }

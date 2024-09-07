@@ -1,7 +1,7 @@
-import { crx } from '@crxjs/vite-plugin';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
-import manifest from './manifest.config';
+import { crx } from '@crxjs/vite-plugin'
+import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
+import manifest from './manifest.config'
 
 export default defineConfig({
   plugins: [
@@ -11,4 +11,4 @@ export default defineConfig({
   server: {
     port: 3322,
   },
-});
+})

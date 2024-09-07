@@ -1,4 +1,4 @@
-import { beforeAll, afterAll } from 'vitest'
+import { afterAll, beforeAll } from 'vitest'
 import { createServer } from 'vite'
 import { fileURLToPath } from 'node:url'
 
@@ -9,7 +9,7 @@ let viteServer: any
 beforeAll(async () => {
   viteServer = await createServer({
     root: __dirname,
-    configFile: "vite.config.ts",
+    configFile: 'vite.config.ts',
   })
   await viteServer.listen()
 })

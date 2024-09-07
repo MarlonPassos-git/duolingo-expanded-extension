@@ -1,11 +1,11 @@
-import { Settings } from "./interfaces";
+import type { Settings } from './interfaces'
 
-export const UNKNOWN_CHALLENGE_TYPE = 'UNKNOWN_CHALLENGE_TYPE';
-export const UNKNOWN_CHALLENGE_HEADER = 'UNKNOWN_CHALLENGE_HEADER';
+export const UNKNOWN_CHALLENGE_TYPE = 'UNKNOWN_CHALLENGE_TYPE'
+export const UNKNOWN_CHALLENGE_HEADER = 'UNKNOWN_CHALLENGE_HEADER'
 
-export const HASH_ALGORITH = 'SHA-256';
+export const HASH_ALGORITH = 'SHA-256'
 
-export const SETTINGS_STORAGE_KEY = 'settings';
+export const SETTINGS_STORAGE_KEY = 'settings'
 
 export enum ChallengeType {
   TAP_COMPLETE = 'tapComplete',
@@ -25,7 +25,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoFill: true,
   saveAnswers: true,
   saveWrongAnswers: true,
-};
+}
 
 export const supportedChallenges: ChallengeType[] = [
   ChallengeType.TRANSLATE,
@@ -34,4 +34,4 @@ export const supportedChallenges: ChallengeType[] = [
   ChallengeType.ASSIST,
   ChallengeType.LISTEN,
   ChallengeType.LISTEN_TAP,
-];
+]
