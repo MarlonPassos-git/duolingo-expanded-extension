@@ -3,7 +3,12 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import manifest from './manifest.config';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), crx({ manifest })],
+  plugins: [
+    crx({ manifest }),
+    react(),
+  ],
+  server: {
+    port: 3322,
+  },
 });

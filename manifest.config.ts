@@ -3,9 +3,6 @@ import packageJson from './package.json'
 import { ConfigEnv } from 'vite'
 const { version } = packageJson
 
-// Convert from Semver (example: 0.1.0-beta6)
-
-
 export default defineManifest(async (env) => { 
     return {
   manifest_version: 3,

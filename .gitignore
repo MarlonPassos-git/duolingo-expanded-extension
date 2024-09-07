@@ -131,3 +131,4 @@ dist
 
 # releases
 releases/
+.env.test
