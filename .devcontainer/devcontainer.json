@@ -1,0 +1,34 @@
+{
+  "name": "duolingo Expanded",
+  "image": "cypress/included:13.6.6",
+  "forwardPorts": [6080, 5901],
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/pnpm": {
+      "version": "9.9.0"
+    },
+    "ghcr.io/joshuanianji/devcontainer-features/mount-pnpm-store": {},
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "portsAttributes": {
+    "6080": {
+      "label": "desktop"
+    }
+  },
+  "postCreateCommand": "pnpm i",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.formatDocument": "always",
+          "source.fixAll.eslint": "always",
+          "source.fixAll.ts": "always"
+        }
+      }
+    }
+  }
+}

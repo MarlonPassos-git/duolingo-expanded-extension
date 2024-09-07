@@ -3,6 +3,10 @@ import puppeteerNode from 'puppeteer'
 import { EXTENSION_PATH } from './constants'
 import type { Page } from 'puppeteer'
 import { getEnv } from './env'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { rmSync } from 'node:fs'
+import { mkdtemp } from 'node:fs/promises'
 
 let browser: Browser | null
 const cookies = [
@@ -25,23 +29,25 @@ export async function getBrowser() {
 }
 
 async function createBrowser() {
+  const tempUserDataDir = await mkdtemp(join(tmpdir(), 'puppeteer-'))
   const _browser = await puppeteerNode.launch({
-    headless: true,
+    executablePath: '/usr/bin/google-chrome',
+    headless: false,
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,
       '--mute-audio',
+      '--no-sandbox',
+      `--user-data-dir=${tempUserDataDir}`,
     ],
     defaultViewport: {
       width: 1920,
       height: 980,
     },
   })
-  // const _browser = await puppeteerNode.connect({
-  //     browserWSEndpoint: 'ws://localhost:3000?token=a',
-  // })
 
-  _browser.on('disconnected', () => {
+  _browser.on('disconnected', async () => {
+    rmSync(tempUserDataDir, { recursive: true, force: true })
     browser = null
   })
 
