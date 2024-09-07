@@ -1,4 +1,5 @@
 import type { Page } from 'puppeteer'
+import { sleep } from 'radashi'
 
 export async function goToFistLesson(page: Page) {
   await page.goto(`https://www.duolingo.com/lesson`)
@@ -59,7 +60,6 @@ export async function getLessonText(page: Page) {
 
 export async function selectChoice(page: Page, choiceIndex = 1) {
   const cssSelector = `[data-test="challenge-choice"]:nth-of-type(${choiceIndex})`
-  await page.waitForSelector(cssSelector)
   await page.click(cssSelector)
 }
 

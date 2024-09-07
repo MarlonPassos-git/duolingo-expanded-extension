@@ -10,7 +10,7 @@
     "lint": "eslint . --fix",
     "preview": "vite preview",
     "clean": "rimraf dist",
-    "test:e2e": "vitest"
+    "test:e2e": "vitest run"
   },
   "keywords": [
     "chrome",

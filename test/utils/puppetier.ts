@@ -28,11 +28,13 @@ export async function getBrowser() {
   return browser
 }
 
+console.log('env', getEnv())
+
 async function createBrowser() {
   const tempUserDataDir = await mkdtemp(join(tmpdir(), 'puppeteer-'))
   const _browser = await puppeteerNode.launch({
-    executablePath: '/usr/bin/google-chrome',
-    headless: false,
+    executablePath: getEnv().CHROME_PATH,
+    headless: getEnv().HEADLESS,
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,

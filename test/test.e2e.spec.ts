@@ -1,8 +1,8 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { getBrowser, setCookies } from './utils/puppetier'
-import type { Browser, Page } from 'puppeteer'
-import { getAudioSrc, getTypeTextInChallengeInput, goToFistLesson, InputMethod, isListenTapLesson, isSelectTranscription, nextLesson, selectChoice, setPlayerInputMethod, skipLesson, typeTextInChallengeInput } from './utils/duolingo'
 import { sleep } from 'radashi'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import type { Browser, Page } from 'puppeteer'
+import { getAudioSrc, getTypeTextInChallengeInput, goToFistLesson, isListenTapLesson, isSelectTranscription, nextLesson, selectChoice, setPlayerInputMethod, skipLesson, typeTextInChallengeInput } from './utils/duolingo'
+import { getBrowser, setCookies } from './utils/puppetier'
 
 describe('Auto Complete Listen Tap', () => {
   let browser: Browser
@@ -56,17 +56,13 @@ describe('Auto Complete Listen Tap', () => {
       else if (await isSelectTranscription(page)) {
         await selectChoice(page)
         await nextLesson(page)
-        sleep(100)
         await nextLesson(page)
       }
       else {
         await skipLesson(page)
-
         await nextLesson(page)
       }
-
-      // await 100ms
-      await sleep(100)
+      await sleep(200)
     } while (!find)
 
     expect('hello').toBe('hello')
