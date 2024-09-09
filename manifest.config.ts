@@ -8,9 +8,10 @@ export default defineManifest(async (env) => {
   return {
     manifest_version: 3,
     description: 'Remembers and auto-fills your answers on Duolingo.',
-    permissions: ['storage'],
+    permissions: ['storage', 'scripting'],
+    host_permissions: ['https://www.duolingo.com/*'],
     background: {
-      service_worker: 'src/background.ts',
+      service_worker: 'src/service_worker.ts',
       type: 'module',
     },
     action: { default_popup: 'src/default_popup/index.html' },
@@ -19,6 +20,7 @@ export default defineManifest(async (env) => {
       {
         matches: ['https://www.duolingo.com/*'],
         js: ['src/content/duolingo/index.ts'],
+        // world: 'MAIN',
       },
     ],
     icons: {

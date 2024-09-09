@@ -1,4 +1,4 @@
-import { SETTINGS_STORAGE_KEY } from '../../utils/constants'
+import { MessageType, SETTINGS_STORAGE_KEY } from '../../utils/constants'
 import {
   getChallengeInputtedAnswer,
   getTotalDailyLessons,
@@ -10,12 +10,15 @@ import {
 } from '../../utils/duolingo'
 import { autoFillAnswer } from '../../utils/duolingo/auto-fill'
 import type { LessonState, Settings } from '../../utils/interfaces'
-import { throttle } from 'radashi'
+import { sleep, throttle } from 'radashi'
 import { duolingoState } from './duolingoState'
 
 const root = document.getElementById('root')
 
+// console.log('marlon', window.getReactInstance)
+
 console.debug('Duolingo Memo content script loading...')
+
 if (!root) throw new Error('root not found')
 
 const lessonState: LessonState = {
@@ -44,19 +47,17 @@ self.chrome.storage.sync.onChanged.addListener((changes) => {
 const saveTotalDailyLessonsThrottled = throttle({ interval: 30_000 }, saveTotalDailyLessons)
 const lessonObserverCallback = async () => {
   if (lessonState.currentChallenge !== null && !lessonState.currentChallenge.node.isConnected) {
-    console.debug('Challenge node disconnected!')
     lessonState.currentChallenge = null
   }
   if (lessonState.currentFeedback !== null && !lessonState.currentFeedback.node.isConnected) {
-    console.debug('Feedback node disconnected!')
     lessonState.currentFeedback = null
   }
 
   if (lessonState.currentChallenge === null) {
     // Find the challenge node
-    console.debug('Searching possible challenge node...')
     const node = document.querySelector('[data-test^="challenge challenge"]')
     if (node) {
+      console.group(lessonState.currentChallenge?.type)
       const parsedChallenge = parseChallengeNode(node)
       console.debug(`Challenge node of type ${parsedChallenge.type} found!`)
       lessonState.currentChallenge = parsedChallenge
@@ -74,11 +75,11 @@ const lessonObserverCallback = async () => {
           console.debug('No answer found!')
         }
       }
+      console.groupEnd()
     }
   }
   else if (lessonState.currentFeedback === null) {
     // Find the feedback node in the mutation
-    console.debug('Searching possible feedback node...')
     const node = document.querySelector('[data-test^="blame blame"]')
     if (node) {
       const parsedFeedback = parseFeedbackNode(node)
@@ -91,7 +92,7 @@ const lessonObserverCallback = async () => {
       else {
         console.debug('Incorrect answer node found! ', settings)
         if (settings.saveWrongAnswers) {
-          saveInputtedAnswer(lessonState)
+          await saveInputtedAnswer(lessonState)
         }
       }
       lessonState.currentFeedback = parsedFeedback
@@ -99,11 +100,8 @@ const lessonObserverCallback = async () => {
   }
 
   if (isFinishLessonPage()) {
-    console.debug('Lesson finished!')
     const totalDailyLessons = await getTotalDailyLessons()
-    console.debug(`Total daily lessons: ${totalDailyLessons + 1}`)
     saveTotalDailyLessonsThrottled(totalDailyLessons + 1)
-    console.debug('Total daily lessons saved!')
   }
 }
 
@@ -119,8 +117,7 @@ async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
 
   const inputtedAnswer = getChallengeInputtedAnswer(currentChallenge)
   if (inputtedAnswer) {
-    console.debug(`Inputted answer: ${inputtedAnswer}`)
-    console.debug('Saving answer...')
+    console.debug(`Saving answer...: ${inputtedAnswer}`)
     await saveAnswer(currentChallenge, inputtedAnswer)
     console.debug('Answer saved!')
   }

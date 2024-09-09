@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from './utils/constants'
+import './serviceWorker/onMessageHandle'
 
 self.chrome.runtime.onInstalled.addListener(async () => {
   console.debug('Installed! DEBUG')
@@ -17,5 +18,3 @@ self.chrome.runtime.onInstalled.addListener(async () => {
     },
   })
 })
-
-console.debug('Background script loaded!')

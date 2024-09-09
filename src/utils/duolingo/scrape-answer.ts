@@ -9,7 +9,13 @@ import type {
 import { isChallengeSupported } from './functions'
 
 const getTranslateChallengeInputtedAnswer = (challenge: TranslateChallenge): string => {
-  return challenge.answerArea.value
+  const a = challenge?.answerArea?.value
+
+  if (!a) {
+    return challenge.node.querySelector('textarea')?.textContent as string
+  }
+
+  return a
 }
 const getTranslateTapChallengeInputtedAnswer = (challenge: TranslateTapChallenge): string[] => {
   const allTokenNodes = Array.from(

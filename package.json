@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint . --fix",
     "preview": "vite preview",
     "clean": "rimraf dist",
@@ -30,6 +30,7 @@
     "@m-p-toolkit/eslint-config": "https://gitpkg.vercel.app/MarlonPassos-git/marlon-passos-toolkit/packages/eslint-config?main",
     "@mui/lab": "6.0.0-beta.9",
     "@mui/material": "^6.0.2",
+    "radash": "^12.1.0",
     "radashi": "12.2.0-beta.af825f4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -35,3 +35,12 @@ export const supportedChallenges: ChallengeType[] = [
   ChallengeType.LISTEN,
   ChallengeType.LISTEN_TAP,
 ]
+
+export enum MessageType {
+  GET_AUDIO = 'GET_AUDIO',
+}
+
+export type MessageData = {
+  action: MessageType.GET_REACT_FIBER
+  css: string
+}

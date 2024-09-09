@@ -5,8 +5,9 @@ import type { Page } from 'puppeteer'
 import { getEnv } from './env'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { rmSync } from 'node:fs'
+import fs from 'node:fs'
 import { mkdtemp } from 'node:fs/promises'
+import { deleteFileOrDir } from './fs'
 
 let browser: Browser | null
 const cookies = [
@@ -28,10 +29,9 @@ export async function getBrowser() {
   return browser
 }
 
-console.log('env', getEnv())
-
 async function createBrowser() {
   const tempUserDataDir = await mkdtemp(join(tmpdir(), 'puppeteer-'))
+  console.log('tempUserDataDir', tempUserDataDir)
   const _browser = await puppeteerNode.launch({
     executablePath: getEnv().CHROME_PATH,
     headless: getEnv().HEADLESS,
@@ -49,7 +49,8 @@ async function createBrowser() {
   })
 
   _browser.on('disconnected', async () => {
-    rmSync(tempUserDataDir, { recursive: true, force: true })
+    deleteFileOrDir(tempUserDataDir, true)
+    console.log('Browser disconnected')
     browser = null
   })
 
