@@ -1,10 +1,9 @@
+import { randomUUID } from 'node:crypto'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { assign, sleep } from 'radashi'
-import { afterAll, beforeAll, beforeEach, describe, expect, it, onTestFailed } from 'vitest'
 import type { Browser, Page } from 'puppeteer'
 import { getAudioSrc, getTypeTextInChallengeInput, goToFistLesson, isListenTapLesson, isSelectTranscription, nextLesson, selectChoice, setPlayerInputMethod, skipLesson, typeTextInChallengeInput } from './utils/duolingo'
 import { getBrowser, setCookies } from './utils/puppetier'
-import { randomUUID } from 'node:crypto'
-import { afterEach } from 'vitest'
 
 describe('Auto Complete Listen Tap', () => {
   let browser: Browser
@@ -23,9 +22,9 @@ describe('Auto Complete Listen Tap', () => {
     await setCookies(page)
   })
 
-  // afterEach(async () => {
-  //   await page.close()
-  // })
+  afterEach(async () => {
+    await page.close()
+  })
 
   it('Should persist the sound when i make a mistake', async () => {
     const answeredResponses = new Map<string, string>()
@@ -73,32 +72,9 @@ describe('Auto Complete Listen Tap', () => {
   })
 
   it('should persist the text when i make a mistake but saving dirents thing', async () => {
-    onTestFailed(async () => {
-      console.log('Test failed')
-      await sleep(100000)
-    }, 60_000 * 10)
+    const answeredResponses = new Map<string, ChecklistItem>()
 
-    type A = {
-      text: string
-      checked: boolean
-    }
-
-    const answeredResponses = new Map<string, A>()
-
-    function isAllAnswered() {
-      if (answeredResponses.size === 0) {
-        return false
-      }
-
-      for (const [, { checked }] of answeredResponses) {
-        if (!checked) {
-          return false
-        }
-      }
-
-      return true
-    }
-    let find: boolean = false
+    let allItensChecked: boolean = false
     await goToFistLesson(page)
 
     do {
@@ -106,7 +82,7 @@ describe('Auto Complete Listen Tap', () => {
       await page.click('body')
       if (await isListenTapLesson(page)) {
         if (isAllAnswered()) {
-          find = true
+          allItensChecked = true
           break
         }
 
@@ -146,6 +122,25 @@ describe('Auto Complete Listen Tap', () => {
         await nextLesson(page)
       }
       await sleep(200)
-    } while (!find)
+    } while (!allItensChecked)
+
+    function isAllAnswered() {
+      if (answeredResponses.size === 0) {
+        return false
+      }
+
+      for (const [, { checked }] of answeredResponses) {
+        if (!checked) {
+          return false
+        }
+      }
+
+      return true
+    }
   })
 })
+
+type ChecklistItem = {
+  text: string
+  checked: boolean
+}

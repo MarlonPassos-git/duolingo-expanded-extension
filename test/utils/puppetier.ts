@@ -31,7 +31,6 @@ export async function getBrowser() {
 
 async function createBrowser() {
   const tempUserDataDir = await mkdtemp(join(tmpdir(), 'puppeteer-'))
-  console.log('tempUserDataDir', tempUserDataDir)
   const _browser = await puppeteerNode.launch({
     executablePath: getEnv().CHROME_PATH,
     headless: getEnv().HEADLESS,
@@ -43,14 +42,13 @@ async function createBrowser() {
       `--user-data-dir=${tempUserDataDir}`,
     ],
     defaultViewport: {
-      width: 1920,
-      height: 980,
+      width: 1720,
+      height: 780,
     },
   })
 
   _browser.on('disconnected', async () => {
     deleteFileOrDir(tempUserDataDir, true)
-    console.log('Browser disconnected')
     browser = null
   })
 
