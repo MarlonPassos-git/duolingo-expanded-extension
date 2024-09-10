@@ -1,0 +1,2 @@
+import './onMessageHandle'
+import './onInstalledHandle'
