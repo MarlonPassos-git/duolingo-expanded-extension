@@ -14,12 +14,12 @@ export default defineManifest(async (env) => {
       service_worker: 'src/serviceWorker/index.ts',
       type: 'module',
     },
-    action: { default_popup: 'src/popup/index.html' },
-    options_page: 'src/options/index.html',
+    action: { default_popup: 'src/popupPage/index.html' },
+    options_page: 'src/optionsPage/index.html',
     content_scripts: [
       {
         matches: ['https://www.duolingo.com/*'],
-        js: ['src/content/duolingo/index.ts'],
+        js: ['src/contentScripts/duolingo/index.ts'],
       },
     ],
     icons: {
