@@ -1,6 +1,6 @@
+import type { ConfigEnv } from 'vite'
 import { defineManifest } from '@crxjs/vite-plugin'
 import packageJson from './package.json'
-import type { ConfigEnv } from 'vite'
 
 const { version } = packageJson
 
@@ -14,7 +14,7 @@ export default defineManifest(async (env) => {
       service_worker: 'src/serviceWorker/index.ts',
       type: 'module',
     },
-    action: { default_popup: 'src/default_popup/index.html' },
+    action: { default_popup: 'src/popup/index.html' },
     options_page: 'src/options/index.html',
     content_scripts: [
       {
