@@ -1,4 +1,4 @@
-import { MessageType, SETTINGS_STORAGE_KEY } from '../../utils/constants'
+import { MessageType, SETTINGS_STORAGE_KEY } from '../../constants'
 import {
   getChallengeInputtedAnswer,
   getTotalDailyLessons,

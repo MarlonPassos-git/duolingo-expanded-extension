@@ -1,4 +1,4 @@
-import { supportedChallenges } from '../constants'
+import { supportedChallenges } from '../../constants'
 import type { Challenge } from '../interfaces'
 
 /**

@@ -14,7 +14,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Layout } from '../components/layout';
 import Logo from '../static/logo/logo.svg';
-import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '../utils/constants';
+import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '../constants';
 import { Settings } from '../utils/interfaces';
 
 

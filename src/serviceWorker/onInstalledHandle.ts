@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '../utils/constants'
+import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY } from '../constants'
 
 self.chrome.runtime.onInstalled.addListener(setDefauldSettings)
 

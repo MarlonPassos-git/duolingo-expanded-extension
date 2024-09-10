@@ -1,4 +1,4 @@
-import { ChallengeType } from '../constants'
+import { ChallengeType } from '../../constants'
 import type {
   AssistChallenge,
   Challenge,

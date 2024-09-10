@@ -1,4 +1,4 @@
-import { MessageType } from '../constants'
+import { MessageType } from '../../constants'
 
 export async function getDuolingoAudio() {
   return new Promise<string>((resolve) => {

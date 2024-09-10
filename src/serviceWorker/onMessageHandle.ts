@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MessageType } from '../utils/constants'
+import { MessageType } from '../constants'
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const tabId = sender.tab?.id

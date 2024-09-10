@@ -1,4 +1,4 @@
-import { ChallengeType, UNKNOWN_CHALLENGE_HEADER } from '../constants'
+import { ChallengeType, UNKNOWN_CHALLENGE_HEADER } from '../../constants'
 import type {
   AssistChallenge,
   Challenge,

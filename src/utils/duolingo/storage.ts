@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill'
-import { ChallengeType, HASH_ALGORITH } from '../constants'
+import { ChallengeType, HASH_ALGORITH } from '../../constants'
 import type { Challenge } from '../interfaces'
 import { isChallengeSupported } from './functions'
 import { isString, sleep } from 'radashi'
