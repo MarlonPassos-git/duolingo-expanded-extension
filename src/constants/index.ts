@@ -34,6 +34,7 @@ export const supportedChallenges: ChallengeType[] = [
   ChallengeType.ASSIST,
   ChallengeType.LISTEN,
   ChallengeType.LISTEN_TAP,
+  ChallengeType.COMPLETE_REVERSE_TRANSLATION,
 ]
 
 export enum MessageType {

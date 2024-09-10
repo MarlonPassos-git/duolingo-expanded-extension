@@ -91,6 +91,9 @@ export const getChallengeInputtedAnswer = (challenge: Challenge): string | strin
   else if (type === ChallengeType.LISTEN_TAP) {
     return getTranslateChallengeInputtedAnswer(challenge as TranslateChallenge)
   }
+  else if (type === ChallengeType.COMPLETE_REVERSE_TRANSLATION) {
+    return getTranslateChallengeInputtedAnswer(challenge as TranslateChallenge)
+  }
 
   return null
 }

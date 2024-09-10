@@ -114,6 +114,9 @@ export const parseChallengeNode = (node: Element): Challenge => {
   else if (type === ChallengeType.LISTEN_TAP) {
     return parseTranslateChallenge(node)
   }
+  else if (type === ChallengeType.COMPLETE_REVERSE_TRANSLATION) {
+    return parseTranslateChallenge(node)
+  }
 
   return {
     node,
