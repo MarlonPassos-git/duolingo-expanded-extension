@@ -1,1 +1,1 @@
-console.info('Hello from popup script!')
+chrome.runtime.openOptionsPage()
