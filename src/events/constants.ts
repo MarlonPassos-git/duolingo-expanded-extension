@@ -1,0 +1,3 @@
+export const EVENT_DUO_LESON_START = 'DUO_LESON_START' as const
+export const EVENT_DUO_LESON_END = 'DUO_LESON_END' as const
+export const EVENT_DUO_ENTER_LEARN_DASHBOARD = 'DUO_ENTER_LEARN_DASHBOARD' as const

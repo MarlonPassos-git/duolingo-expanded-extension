@@ -12,6 +12,7 @@ import { autoFillAnswer } from '../../utils/duolingo/auto-fill'
 import type { LessonState, Settings } from '../../utils/interfaces'
 import { sleep, throttle } from 'radashi'
 import { duolingoState } from './duolingoState'
+import { EVENT_DUO_ENTER_LEARN_DASHBOARD } from '../../events/constants'
 
 const root = document.getElementById('root')
 
