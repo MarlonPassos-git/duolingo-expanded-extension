@@ -15,8 +15,6 @@ import type { LessonState, Settings } from '../../utils/interfaces'
 
 const root = document.getElementById('root')
 
-console.log('marlon', window.getReactInstance)
-
 console.debug('Duolingo Memo content script loading...')
 
 if (!root) throw new Error('root not found')
