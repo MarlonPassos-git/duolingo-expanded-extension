@@ -14,6 +14,9 @@
       "label": "desktop"
     }
   },
+  "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+  ],
   "postCreateCommand": "pnpm i",
   "customizations": {
     "vscode": {
