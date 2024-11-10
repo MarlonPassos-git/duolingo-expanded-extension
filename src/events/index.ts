@@ -1,1 +1,2 @@
+import './onUrlChange'
 import './enterLearnDashboard'
