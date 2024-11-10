@@ -18,10 +18,6 @@ const root = document.getElementById('root')
 
 if (!root) throw new Error('root not found')
 
-document.addEventListener('DUO_ENTER_LEARN_DASHBOARD', (event) => {
-  console.log('DUO_ENTER_LEARN_DASHBOARD', event)
-})
-
 const lessonState: LessonState = {
   onLesson: false,
   currentChallenge: null,
@@ -128,9 +124,6 @@ async function saveInputtedAnswer(_lessonState: NonNullable<LessonState>) {
 }
 
 const lessonObserver = new MutationObserver(lessonObserverCallback)
-
-let oldHref = document.location.href
-
 const handleStreakMenuThrottled = throttle({ interval: 1_000 }, handleStreakMenu)
 /**
  * Main functionality should only execute when the user is on a lesson page.
@@ -156,23 +149,10 @@ const toggleObservers = async (currentHref: string) => {
   }
   handleStreakMenuThrottled()
 }
-const urlObserverCallback = () => {
-  const currentHref = document.location.href
 
-  if (oldHref !== currentHref) {
-    console.debug('URL changed!', currentHref)
-    oldHref = currentHref
-    toggleObservers(currentHref)
-  }
-}
-const urlObserver = new MutationObserver(urlObserverCallback)
-
-urlObserver.observe(root, { childList: true, subtree: true })
-
-// Handle the case where the user navigates to a lesson directly
-toggleObservers(document.location.href)
-
-console.debug('Duolingo Memo content script loaded!')
+document.addEventListener('DUO_URL_CHANGE', ({ detail: { newUrl } }) => {
+  toggleObservers(newUrl)
+})
 
 function isFinishLessonPage() {
   const element = document.querySelector('[data-test="session-complete-slide"]')

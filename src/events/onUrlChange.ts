@@ -18,7 +18,6 @@ urlObserver.observe(root, { childList: true, subtree: true })
 
 function urlObserverCallback() {
   const activeUrl = document.location.href
-  console.log('activeUrl', activeUrl)
   if (firstActivation) {
     firstActivation = false
     document.dispatchEvent(createEnterLearnDashboardEvent({ newUrl: oldHref }))
