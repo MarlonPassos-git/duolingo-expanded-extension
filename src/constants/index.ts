@@ -45,3 +45,4 @@ export type MessageData = {
   action: MessageType.GET_REACT_FIBER
   css: string
 }
+export * from './duoLinks'

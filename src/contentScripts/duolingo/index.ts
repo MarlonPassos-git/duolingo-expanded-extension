@@ -1,3 +1,4 @@
+import '../../events/index'
 import { autoFillAnswer } from '../../utils/duolingo/auto-fill'
 import { duolingoState } from './duolingoState'
 import { SETTINGS_STORAGE_KEY } from '../../constants'
@@ -18,6 +19,10 @@ const root = document.getElementById('root')
 console.debug('Duolingo Memo content script loading...')
 
 if (!root) throw new Error('root not found')
+
+document.addEventListener('DUO_ENTER_LEARN_DASHBOARD', (event) => {
+  console.log('DUO_ENTER_LEARN_DASHBOARD', event)
+})
 
 const lessonState: LessonState = {
   onLesson: false,
@@ -155,7 +160,9 @@ const toggleObservers = async (currentHref: string) => {
 }
 const urlObserverCallback = () => {
   const currentHref = document.location.href
+
   if (oldHref !== currentHref) {
+    console.debug('URL changed!', currentHref)
     oldHref = currentHref
     toggleObservers(currentHref)
   }
