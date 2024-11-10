@@ -1,6 +1,6 @@
-import { isBoolean, isNumber, isString } from 'radashi'
 import type { DuolingoState } from '../../utils/interfaces'
 import { getDayKey, getTotalDailyLessons } from '../../utils/duolingo/storage'
+import { isBoolean, isNumber, isString } from 'radashi'
 
 const stateHandler: ProxyHandler<DuolingoState> = {
   set(target, property, value) {

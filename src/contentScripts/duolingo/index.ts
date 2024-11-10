@@ -1,4 +1,7 @@
-import { MessageType, SETTINGS_STORAGE_KEY } from '../../constants'
+import { autoFillAnswer } from '../../utils/duolingo/auto-fill'
+import { duolingoState } from './duolingoState'
+import { SETTINGS_STORAGE_KEY } from '../../constants'
+import { throttle } from 'radashi'
 import {
   getChallengeInputtedAnswer,
   getTotalDailyLessons,
@@ -8,15 +11,11 @@ import {
   saveTotalDailyLessons,
   searchExistingAnswer,
 } from '../../utils/duolingo'
-import { autoFillAnswer } from '../../utils/duolingo/auto-fill'
 import type { LessonState, Settings } from '../../utils/interfaces'
-import { sleep, throttle } from 'radashi'
-import { duolingoState } from './duolingoState'
-import { EVENT_DUO_ENTER_LEARN_DASHBOARD } from '../../events/constants'
 
 const root = document.getElementById('root')
 
-// console.log('marlon', window.getReactInstance)
+console.log('marlon', window.getReactInstance)
 
 console.debug('Duolingo Memo content script loading...')
 
