@@ -16,8 +16,6 @@ import type { LessonState, Settings } from '../../utils/interfaces'
 
 const root = document.getElementById('root')
 
-console.debug('Duolingo Memo content script loading...')
-
 if (!root) throw new Error('root not found')
 
 document.addEventListener('DUO_ENTER_LEARN_DASHBOARD', (event) => {

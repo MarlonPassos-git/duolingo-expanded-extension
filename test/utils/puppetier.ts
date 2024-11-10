@@ -1,19 +1,18 @@
 import type { Browser } from 'puppeteer'
-import puppeteerNode from 'puppeteer'
-import { EXTENSION_PATH } from './constants'
-import type { Page } from 'puppeteer'
-import { getEnv } from './env'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import fs from 'node:fs'
-import { mkdtemp } from 'node:fs/promises'
 import { deleteFileOrDir } from './fs'
+import { EXTENSION_PATH } from './constants'
+import { getEnv } from './env'
+import { join } from 'node:path'
+import { mkdtemp } from 'node:fs/promises'
+import type { Page } from 'puppeteer'
+import puppeteerNode from 'puppeteer'
+import { tmpdir } from 'node:os'
 
 let browser: Browser | null
 const cookies = [
   {
     name: 'jwt_token',
-    value: getEnv().DUOLINGO_JWT_TOKEN,
+    value: getEnv().VITE_DUOLINGO_JWT_TOKEN,
     domain: '.duolingo.com',
   }]
 
@@ -32,8 +31,8 @@ export async function getBrowser() {
 async function createBrowser() {
   const tempUserDataDir = await mkdtemp(join(tmpdir(), 'puppeteer-'))
   const _browser = await puppeteerNode.launch({
-    executablePath: getEnv().CHROME_PATH,
-    headless: getEnv().HEADLESS,
+    executablePath: getEnv().VITE_CHROME_PATH,
+    headless: getEnv().VITE_HEADLESS,
     args: [
       `--disable-extensions-except=${EXTENSION_PATH}`,
       `--load-extension=${EXTENSION_PATH}`,

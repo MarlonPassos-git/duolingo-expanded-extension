@@ -1,5 +1,4 @@
 import type { Page } from 'puppeteer'
-import { sleep } from 'radashi'
 
 export async function goToFistLesson(page: Page) {
   await page.goto(`https://www.duolingo.com/lesson`)

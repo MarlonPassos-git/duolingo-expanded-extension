@@ -13,7 +13,7 @@ export interface DuoLessonEndDetail {
 export interface DuoEnterLearnDashBoardDetail {}
 
 export interface DuoUrlChangeDetail {
-  oldUrl: string
+  oldUrl?: string
   newUrl: string
 }
 
