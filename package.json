@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "clean": "rimraf dist",
     "test:e2e": "vitest run --project e2e",
-    "test:unit": "vitest run --project unit"
+    "test:unit": "vitest run --project unit",
+    "test:unit:watch": "vitest --watch --project unit"
   },
   "keywords": [
     "chrome",
@@ -31,6 +32,7 @@
     "@m-p-toolkit/eslint-config": "https://gitpkg.vercel.app/MarlonPassos-git/marlon-passos-toolkit/packages/eslint-config?main",
     "@mui/lab": "6.0.0-beta.14",
     "@mui/material": "^6.1.6",
+    "@testing-library/dom": "^10.4.0",
     "radashi": "12.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -40,12 +42,14 @@
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.28",
+    "@testing-library/jest-dom": "^6.6.3",
     "@types/chrome": "^0.0.280",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/webextension-polyfill": "^0.12.1",
     "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^9.14.0",
+    "happy-dom": "^15.11.0",
     "puppeteer": "^23.7.1",
     "rimraf": "^6.0.1",
     "typescript": "^5.6.3",

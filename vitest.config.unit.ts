@@ -4,6 +4,8 @@ export default defineConfig({
   test: {
     name: 'unit',
     include: ['**/*.unit.spec.ts'],
+    environment: 'happy-dom',
+    setupFiles: ['./test.setup.unit.ts'],
     poolOptions: {
       forks: {
         execArgv: ['--env-file=.env.test'],
