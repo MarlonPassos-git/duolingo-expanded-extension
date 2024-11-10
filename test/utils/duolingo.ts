@@ -65,6 +65,8 @@ export async function selectChoice(page: Page, choiceIndex = 1) {
 export async function typeTextInChallengeInput(page: Page, text: string) {
   const cssSelector = 'textarea'
   await page.waitForSelector(cssSelector)
+  // apaga todo o texta que ja existe
+  await page.$eval(cssSelector, el => el.textContent = '')
   await page.type(cssSelector, text)
 }
 

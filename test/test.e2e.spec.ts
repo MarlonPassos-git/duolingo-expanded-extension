@@ -106,6 +106,7 @@ describe('Auto Complete Listen Tap', () => {
             checked: false,
             text,
           })
+          await sleep(100)
           await nextLesson(page)
           await nextLesson(page)
         }

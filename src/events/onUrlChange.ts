@@ -4,7 +4,7 @@ import { EVENT_DUO_URL_CHANGE } from './constants'
 const root = document.getElementById('root')
 let firstActivation = true
 let oldHref = document.location.href
-console.log('root', root?.ATTRIBUTE_NODE)
+
 if (!root) throw new Error('root not found')
 
 /**

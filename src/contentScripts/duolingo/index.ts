@@ -13,6 +13,7 @@ import {
   searchExistingAnswer,
 } from '../../utils/duolingo'
 import type { LessonState, Settings } from '../../utils/interfaces'
+import { waitForElement } from '../../utils/waitForElement'
 
 const root = document.getElementById('root')
 
@@ -168,7 +169,7 @@ async function handleStreakMenu() {
     $streakMenuClone = document.getElementById('daily-lessons') as HTMLDivElement
   }
   else {
-    const $streakMenu = await awaitElement<HTMLDivElement>('[data-test="streak-menu"]')
+    const $streakMenu = await waitForElement<HTMLDivElement>('[data-test="streak-menu"]')
     $streakMenuClone = $streakMenu.cloneNode(true) as HTMLDivElement
     $streakMenuClone.dataset.test = 'daily-lessons'
     $streakMenuClone.id = 'daily-lessons'
@@ -185,16 +186,4 @@ async function handleStreakMenu() {
   if ($streak) {
     $streak.textContent = duolingoState.totalDailyLessons.toString()
   }
-}
-
-function awaitElement<T extends Element>(selector: string) {
-  return new Promise<T>((resolve) => {
-    const interval = setInterval(() => {
-      const element = document.querySelector<T>(selector)
-      if (element) {
-        clearInterval(interval)
-        resolve(element)
-      }
-    }, 100)
-  })
 }
